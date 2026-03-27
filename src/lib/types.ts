@@ -6,8 +6,26 @@ export interface User {
   organization?: string
   role?: string
   avatar_url?: string
+  password_hash?: string
   created_at: string
   updated_at: string
+}
+
+export interface RegisterInput {
+  name: string
+  email: string
+  phone?: string
+  organization?: string
+  password: string
+}
+
+export interface LoginInput {
+  email: string
+  password: string
+}
+
+export interface AuthUser extends User {
+  password?: string
 }
 
 export interface Event {

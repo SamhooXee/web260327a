@@ -4,9 +4,11 @@
  */
 
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const navLinks = [
     { name: "首页", path: "/" },
@@ -44,9 +46,34 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           <button className="text-on-surface-variant hover:text-primary font-headline text-sm uppercase transition-all">
             EN/<span className="text-primary">CN</span>
           </button>
-          <button className="bg-primary text-on-primary px-6 py-2 rounded-xl font-headline font-bold text-sm uppercase active:scale-95 transition-transform hover:bg-primary-fixed-dim">
-            立即注册
-          </button>
+          {isAuthenticated ? (
+            <div className="flex items-center gap-4">
+              <span className="text-on-surface-variant text-sm">
+                你好, <span className="text-primary font-medium">{user?.name}</span>
+              </span>
+              <button
+                onClick={logout}
+                className="text-on-surface-variant hover:text-primary font-headline text-sm uppercase transition-all"
+              >
+                退出
+              </button>
+            </div>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="text-on-surface-variant hover:text-primary font-headline text-sm uppercase transition-all"
+              >
+                登录
+              </Link>
+              <Link
+                to="/register"
+                className="bg-primary text-on-primary px-6 py-2 rounded-xl font-headline font-bold text-sm uppercase active:scale-95 transition-transform hover:bg-primary-fixed-dim"
+              >
+                立即注册
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
