@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { useState } from "react";
 import { motion } from "motion/react";
+import { applicationsApi } from "../lib/api/applications";
 import { 
   Calendar, 
   MapPin, 
@@ -15,6 +17,25 @@ import {
 } from "lucide-react";
 
 export const Conferences = () => {
+  const handleConferenceSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    try {
+      await applicationsApi.createConferenceRegistration({
+        full_name: formData.get("fullName") as string,
+        organization: formData.get("organization") as string,
+        email: formData.get("email") as string,
+        pass_type: formData.get("passType") as string,
+        dietary_needs: formData.get("dietaryNeeds") as string,
+        agreed_to_terms: formData.get("terms") === "on",
+      });
+      alert("Registration submitted successfully!");
+      e.currentTarget.reset();
+    } catch (error) {
+      alert("Failed to submit registration");
+    }
+  };
+
   const agenda = [
     {
       time: "09:00",
@@ -194,25 +215,25 @@ export const Conferences = () => {
                 <h2 className="font-headline text-3xl font-bold mb-2">确保您的席位</h2>
                 <p className="text-on-surface-variant">填写注册表，加入星际先锋行列。</p>
               </div>
-              <form className="space-y-8">
+              <form onSubmit={handleConferenceSubmit} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
                     <label className="label-md uppercase tracking-widest text-primary block">姓名</label>
-                    <input className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-on-tertiary-container" placeholder="张三" type="text"/>
+                    <input name="fullName" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-on-tertiary-container" placeholder="张三" type="text"/>
                   </div>
                   <div className="space-y-2">
                     <label className="label-md uppercase tracking-widest text-primary block">所属机构</label>
-                    <input className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-on-tertiary-container" placeholder="全球研究院" type="text"/>
+                    <input name="organization" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-on-tertiary-container" placeholder="全球研究院" type="text"/>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
                     <label className="label-md uppercase tracking-widest text-primary block">职业邮箱</label>
-                    <input className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-on-tertiary-container" placeholder="j.doe@astra.com" type="email"/>
+                    <input name="email" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-on-tertiary-container" placeholder="j.doe@astra.com" type="email"/>
                   </div>
                   <div className="space-y-2">
                     <label className="label-md uppercase tracking-widest text-primary block">通行证类型</label>
-                    <select className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none">
+                    <select name="passType" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none">
                       <option>精英全程通行证</option>
                       <option>战略代表</option>
                       <option>虚拟观察员</option>
@@ -221,10 +242,10 @@ export const Conferences = () => {
                 </div>
                 <div className="space-y-2">
                   <label className="label-md uppercase tracking-widest text-primary block">特殊饮食或无障碍需求</label>
-                  <textarea className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-on-tertiary-container" placeholder="请详细说明..." rows={4}></textarea>
+                  <textarea name="dietaryNeeds" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-on-tertiary-container" placeholder="请详细说明..." rows={4}></textarea>
                 </div>
                 <div className="flex items-center gap-4">
-                  <input className="rounded bg-surface-container-lowest border-outline-variant/30 text-primary focus:ring-primary/20" id="terms" type="checkbox"/>
+                  <input name="terms" className="rounded bg-surface-container-lowest border-outline-variant/30 text-primary focus:ring-primary/20" id="terms" type="checkbox"/>
                   <label className="text-sm text-on-surface-variant" htmlFor="terms">我同意国际协议和数据隐私协议。</label>
                 </div>
                 <button className="w-full md:w-auto px-12 py-4 bg-primary text-on-primary rounded-xl font-headline font-bold uppercase tracking-[0.15em] text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/10" type="submit">完成注册</button>

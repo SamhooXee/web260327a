@@ -3,20 +3,44 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { useState } from "react";
 import { motion } from "motion/react";
-import { 
-  Calendar, 
-  MapPin, 
-  FileText, 
-  CheckCircle2, 
-  Users, 
-  Rocket, 
-  Download, 
+import {
+  Calendar,
+  MapPin,
+  FileText,
+  CheckCircle2,
+  Users,
+  Rocket,
+  Download,
   ExternalLink,
   ChevronDown
 } from "lucide-react";
+import { applicationsApi } from "../lib/api/applications";
 
 export const Training = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleTrainingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    try {
+      setIsSubmitting(true);
+      await applicationsApi.createTrainingApplication({
+        full_name: formData.get("fullName") as string,
+        organization: formData.get("organization") as string,
+        email: formData.get("email") as string,
+        phone: formData.get("phone") as string,
+        goals: formData.get("goals") as string,
+      });
+      alert("Application submitted successfully!");
+      e.currentTarget.reset();
+    } catch (error) {
+      alert("Failed to submit application");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   const benefits = [
     {
       icon: <CheckCircle2 className="text-primary" size={20} />,
@@ -110,28 +134,28 @@ export const Training = () => {
               <FileText className="text-primary" size={32} />
               Application Form
             </h2>
-            <form className="space-y-8">
+            <form onSubmit={handleTrainingSubmit} className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
                   <label className="block font-label text-sm text-primary uppercase tracking-widest font-semibold">全名</label>
-                  <input className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none text-on-surface transition-all" placeholder="张三" type="text"/>
+                  <input name="fullName" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none text-on-surface transition-all" placeholder="张三" type="text"/>
                 </div>
                 <div className="space-y-2">
                   <label className="block font-label text-sm text-primary uppercase tracking-widest font-semibold">所属机构</label>
-                  <input className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none text-on-surface transition-all" placeholder="阿斯特拉集团" type="text"/>
+                  <input name="organization" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none text-on-surface transition-all" placeholder="阿斯特拉集团" type="text"/>
                 </div>
                 <div className="space-y-2">
                   <label className="block font-label text-sm text-primary uppercase tracking-widest font-semibold">电子邮箱</label>
-                  <input className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none text-on-surface transition-all" placeholder="j.doe@astraglobal.com" type="email"/>
+                  <input name="email" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none text-on-surface transition-all" placeholder="j.doe@astraglobal.com" type="email"/>
                 </div>
                 <div className="space-y-2">
                   <label className="block font-label text-sm text-primary uppercase tracking-widest font-semibold">电话号码</label>
-                  <input className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none text-on-surface transition-all" placeholder="+86 138-0000-0000" type="tel"/>
+                  <input name="phone" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none text-on-surface transition-all" placeholder="+86 138-0000-0000" type="tel"/>
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="block font-label text-sm text-primary uppercase tracking-widest font-semibold">项目目标与备注</label>
-                <textarea className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none text-on-surface transition-all" placeholder="简要描述您参加此项目的目标..." rows={4}></textarea>
+                <textarea name="goals" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none text-on-surface transition-all" placeholder="简要描述您参加此项目的目标..." rows={4}></textarea>
               </div>
               <div className="pt-4">
                 <button className="w-full bg-primary text-on-primary font-headline font-bold py-4 rounded-xl uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_10px_30px_rgba(233,193,118,0.2)]" type="submit">提交申请</button>

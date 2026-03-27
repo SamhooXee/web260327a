@@ -3,38 +3,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { 
-  School, 
-  MessageSquare, 
-  ArrowRight, 
+import {
+  School,
+  MessageSquare,
+  ArrowRight,
   Calendar
 } from "lucide-react";
+import { eventsApi } from "../lib/api/events";
+import type { Event } from "../lib/types";
 
 export const Home = () => {
-  const events = [
-    {
-      date: "2024年10月14-16日",
-      location: "新加坡",
-      title: "亚太贸易纽带",
-      status: "已确认",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDS5o_BvZRR_I22rTkMYeWQy_ZiUlzOpdTLJL6REEfE-Qk-sscfEM2R9yxzQzgJrkOUW7WCzGpfRmcZ_qXzVVguo4AlcxtGrdbzO4P1Zp-weMKZXHuY9WZyMlsgg49FjY4E8vreou-VvPXiWz1HHtA_u5-Aa86eoUz9bqUqY1Nk5PsvJIil8N24CJtaWTrp7yFyGa-4PbXrBPRRWlTdWOIqCUQdSYPXtR9GPzP76c4mndRgP-ZKCVCxMp1032se0E_jrWroFW10Q2k"
-    },
-    {
-      date: "2024年11月02-05日",
-      location: "伦敦",
-      title: "战略外交研讨会",
-      status: "精英准入",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDpQ4nX0YjrgOQx89ZOck2LQN6snsd2rElamQ27lreV6wAzVG5FcY7aAsQ7wbDd5q6rRW8BsQUUGJ19kyXNwnYOuPBXgjoyzMlDiyJasGHlahhUC8kcD6JhoLsfWerc82OPbKYl_VHacqQl8Eoj_mFwO_1KhYgi9uqPC6DapwJr2tRuvH76RDHdHyq-876lY8oY-4DTD1ayer8ZC86EQ4NVYDLlPyhYdkhEBNfbK9mxCYFrt_a4722Ee_9YMYQPb2y_xYQcDUkdcss"
-    },
-    {
-      date: "2024年12月12-14日",
-      location: "巴黎",
-      title: "全球政策论坛",
-      status: "报名开放中",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZufz5ev0RYdeYoej--mr1rlgliYRLq2pmgRfz4vSVCi52q2x3Po_Kcu9wHwCXg8VKS7q776mGa7sC9STI1dpnYI14SSH-q57fBj7wR3vW_pxSuObq390Df437aNV8rSwVOgwWt_KX3uDo-xB6b0D1HJ6Vf16Mti34EB5j0phCtqnYIuOenfM8AVftIXRZy8uOZ2tZuXZyCmd3_3_bEUh688MKHDK6tCOYafwhlqRTRDx0WNTJUIM30Fyat9tkG51jfvHtZQg-mTw"
-    }
-  ];
+  const [events, setEvents] = useState<Event[]>([]);
+
+  useEffect(() => {
+    eventsApi.getAll().then(setEvents).catch(console.error);
+  }, []);
 
   return (
     <div className="overflow-x-hidden">
@@ -208,7 +193,7 @@ export const Home = () => {
                   <img 
                     alt={event.title} 
                     className="w-full h-full object-cover transition-transform group-hover:scale-105" 
-                    src={event.image}
+                    src={event.image_url}
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-md px-3 py-1 rounded text-[10px] font-bold text-primary uppercase tracking-tighter">

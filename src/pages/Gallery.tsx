@@ -4,51 +4,21 @@
  */
 
 import { motion } from "motion/react";
-import { 
+import {
   ChevronDown,
   Bell,
   User as UserIcon
 } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { galleryApi } from '../lib/api/gallery';
+import type { Gallery } from '../lib/types';
 
 export const Gallery = () => {
-  const photos = [
-    {
-      id: 1,
-      tag: "2023年全球峰会",
-      title: "数字外交论坛",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAUuJDxRtkTCh7a3uiwlvGMD6AkmEEkI6P7NgcQB7QdmoSfCi-LYrnZgUSfjjCtA4OJGRD_NqfYilfGAHZXHY-YqqW_YLa65H1x5qAjgVtM3F5Ra5BUKWhXk397oYciJEwT8vLmGdT7YmTgTIlNry7WC05ETWxDuKwSlpZsPLYAOOuCDSDBThWIE-fW4SCn05HREsGSWeS64sL_Ddea_5ndK1rOUDclmcho9N99_kzVepKem6VQoWhmCxZ7Y3JBNQlMzv8RGn9Gyxs"
-    },
-    {
-      id: 2,
-      tag: "Alpha 届毕业典礼",
-      title: "精英领导力项目",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCq5to1_2pr5vlaQ-GRfkx57sHwYcu5ONHos0xYOpLxVp1qp025TCVeqrgcxDEj4vj-KxU1NK0lc2lgnGva3FZYqRvA-mS9RTIjZQwrR9MgkGJW6dM_0rwV_vU21XCme4GFMRk5mwVYunpcAwzPDRtLwU45TjmauyzJLOhaRbtbkcD8lwb2nfDcbh54Wb5X9h7dJgN4Gx9-b33Ss_aevdl5tvFQ26jPwc5Ht86D3UfpJWVM9KoBCZNH9G71NucrYa0QM0lxpVESZWI"
-    },
-    {
-      id: 3,
-      tag: "2022年区域协作",
-      title: "泛亚经济圆桌会议",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCfCtoY7qsN0GnpVT-CHy5_LtDAhkBBv_3D98abFM6cG8WcJLizQS1bOsvQstCdIOFphQmD_PLH3PJfHUMXaa54k1wuDCHqb8hUP8jfhEIwly9sJhCoQrz4KdyFMCT-BKr_FNhoE1LVE17usNbOJAFIuPByRAmRlF9o01ECuW1qq4cQF6SgRJdHjN2e7ip0rnJ9TJokzT4J1lRsCtzUIuz08x9bIf00B0z_E_piucrqZgC5QfVO551CtkqbH0k8ugkvMuzwAS9KASw"
-    },
-    {
-      id: 4,
-      tag: "2023年年度盛典",
-      title: "星际卓越奖颁奖礼",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDlzwQTCg1XydE_VaAiWLGIovMQf8LpQpfvWaOcnhBHdrObGpu46ZgsvoV-GzeV32zGO1hG7Z1pWo9nczKWnyp1dVamjaQaIDS6K5pl8D1C6IAQI3ms_sVF5opw7s-FcEoxvpdsPuC32U-etb9As9xLByBtD9AKg7epQGfeKtC0PqSlvDGW6wTpAU917oT39fJN4FfrRrcx6VeON_iLTcFLW5K8755h60nIdAfqAnxVuDXPe4jFjsJTKm8OTBcFT-U4-3B6I4pJ2so"
-    },
-    {
-      id: 5,
-      tag: "2021年卓越培训",
-      title: "战略协议研修班",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDiCi056sWymnJzEc9yRXd5mKhJZFbQGqlAPHXKb2A9zoLjmuIPPck6doDvb9WKJirXNlJPDyyHl0nhCN3syyWo9upY13k0WA2Y7zIVYRQ-KBlNK1W4x1mGaA6su1CO1m4C7EAWxcvxrCuHde6BKRJv4KOvYQ_hmtSxRVx-hChgjqyu6StZA-xOAnqEL-Z2KSVhgfs4Pff3lB74rnDWgsYCbDLsTj3dvS06ZlFuD60YOm09V9jLwsrg3AeKA9Wmb5xLgP5QlLhY7UQ"
-    },
-    {
-      id: 6,
-      tag: "Beta 届研讨会",
-      title: "未来遗产实验室",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDEFAC9PHaG4h6GbU27iSSS-ax1kKxi74IUENHeRqD2NQY5aNevPUqyvV1uGbjXndvGyNP0cMoIhaMA-VR1IZTOD0racr0oMnL010IjyLry7gRIpHvI7ObKOKhP7qxHY207EhiM1y8gx_PXMagkuCpML3NfGfKNmsaTSftXhJD2f5LF9R05FRNh7QJLNWWsHEXVevT4jMRDE0hnVMNwTU5ru806YsPci6yANk5MKYvUncvtMUCkRd0JJUhOqZkzvtwxxQngQS6gObQ"
-    }
-  ];
+  const [photos, setPhotos] = useState<Gallery[]>([]);
+
+  useEffect(() => {
+    galleryApi.getAll().then(setPhotos).catch(console.error);
+  }, []);
 
   return (
     <main className="pt-32 pb-24 px-6 md:px-12 max-w-screen-2xl mx-auto min-h-screen">
@@ -105,7 +75,7 @@ export const Gallery = () => {
             <img 
               alt={photo.title} 
               className="w-full h-auto object-cover opacity-90 group-hover:opacity-100 transition-opacity" 
-              src={photo.image}
+              src={photo.image_url}
               referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60"></div>

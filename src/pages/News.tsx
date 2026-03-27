@@ -4,43 +4,25 @@
  */
 
 import { motion } from "motion/react";
-import { 
-  Search, 
-  Mail, 
-  ArrowRight, 
+import { useState, useEffect } from "react";
+import {
+  Search,
+  Mail,
+  ArrowRight,
   ArrowLeft,
   ChevronDown,
   User,
   Clock
 } from "lucide-react";
+import { newsApi } from "../lib/api/news";
+import type { News as NewsArticle } from "../lib/types";
 
 export const News = () => {
-  const articles = [
-    {
-      date: "2024年10月20日",
-      title: "New Orbital Transit Corridor Established over Pacific",
-      excerpt: "The implementation of the new transit corridor marks a significant milestone in reducing friction between commercial and scientific launches.",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBpprAi3gPiqZkGGy7ar0VcPmXTaiqxIKcs9pQ2w_jbkrO_sblaKquxAhjN_cUh-IvBjFu9KsVp8aIi-e4cdQXDFx5UmGoOQKQ7b-9TNBGpH23J9NubXwzyQaBARgLxoL4zCcIqfIrmNFRnz1S-79cHV4T7cDNPHfWhPBwFBEoWAP_SHVtDmggEsIKL0J3SO3xZysQcViNMyzhTD1jKK2nzlU5ar3Qk7CMMVGBVTpFW1h1REdVpb8EuCC6RecGlOQzUSSiCfGkFSyw"
-    },
-    {
-      date: "2024年10月15日",
-      title: "Astra Observatory Unveils First Deep Field Imagery",
-      excerpt: "Capturing light from 13.8 billion years ago, the latest imagery provides unprecedented clarity into the early formation of celestial structures.",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDH2274r3ZVgFXEKP5Q3Krchut1DLSyp6xOpUm908j-NG4mxhrH0zf3R2qzK3nJa_JB6rtWzbJUqIPh7ACNbZ0_NR83xafEQUXGvH4CvkA7HUuL85CD-yjSQErRvAGh1khxkK4711LisckpLs9y0PEcxs1kK4poIGPP2NrUBPF5cAklW9Tot-QJ3ZIxzHbX_nP5jsDraPAJtARiBJn7SYRqnD-VIXDMffoOIE_ksYWPtgWeTaVRvNrrlr5tn0_KiNC5xGZYwNUAITM"
-    },
-    {
-      date: "2024年10月12日",
-      title: "Diplomatic Roundtable: Securing Low Earth Orbit",
-      excerpt: "A closed-door session focused on the debris mitigation strategies and the future of satellite decommission protocols.",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBBBMgFYdug7YYruecCic7C_vdtllTxKtlDUmLVq6ItCn4tPuP4eJ6k5GUKRUlU12Ga1A38clesSDPP0MQsf7oHjFbgOQ_PtvCOTYSIebAjiiLZZ7bHgERHZq9obvqSJZQqxjZPaXMbiy17JsgirxCJz03BfSQZDPt2sl9-gauHcpENY2hbhi8gE01XdBJSRsWe93b2jOFSJf2jFSIQIwFGjN2demeFX1jFvRgEn3ApafU2ZzXyjHbXzhJ1M1iuBOFPWH1TlODhrYc"
-    },
-    {
-      date: "2024年10月08日",
-      title: "Technological Leap in Quantum Communications",
-      excerpt: "Researchers at Astra Global Labs announce a breakthrough in instant data relay between Earth and lunar bases.",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBZSBSgs8Fv_mueyvKXTcZgU5qLBIsBdQIgclCVMoAXzw4ALQpSbLbnpK1-0andyI19lDRhLbbZ5FGOgjSxv4-9ymXGdlAq6eSFWw0uAY5xLT8Ik7W4CjCZ3tU0Oi2vGVdrhV7M-ZSiwkJR9RdeJh-Tu9VQO_r8sNErUbqW6S-vxo6fORYDKJTJtkiGBT3SboT3E9ryMtl9UgLlaJ6qXHIfYRCnYZErr8oXRh359agzfNvkBlBEILJ8uefLZBIVXEvRNMaCL-g68Uo"
-    }
-  ];
+  const [articles, setArticles] = useState<NewsArticle[]>([]);
+
+  useEffect(() => {
+    newsApi.getAll().then(setArticles).catch(console.error);
+  }, []);
 
   return (
     <div className="bg-background">
@@ -112,7 +94,7 @@ export const News = () => {
                     <img 
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                       alt={article.title} 
-                      src={article.image}
+                      src={article.image_url}
                       referrerPolicy="no-referrer"
                     />
                   </div>
