@@ -5,6 +5,7 @@
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { I18nProvider } from "./i18n";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
 import { Contact } from "./pages/Contact";
@@ -18,22 +19,24 @@ import { Login } from "./pages/Login";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/conferences" element={<Conferences />} />
-            <Route path="/training" element={<Training />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </Layout>
-      </Router>
-    </AuthProvider>
+    <I18nProvider>
+      <AuthProvider>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/news" element={<News />} />
+              <Route path="/gallery" element={<Gallery />} />
+              <Route path="/conferences" element={<Conferences />} />
+              <Route path="/training" element={<Training />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </AuthProvider>
+    </I18nProvider>
   );
 }
